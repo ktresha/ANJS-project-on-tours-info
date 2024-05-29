@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="toursApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Tours Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color:rgb(127, 209, 191);
+    }
+    h1 {
+      text-align: center;
+      color: #333333;
+    }
+    ul {
+      list-style-type:circle;
+      padding: 0;
+    }
+    li {
+      border: 1px solid #8eafaa;
+      margin-bottom: 20px;
+      padding: 20px;
+      background-color:rgb(116, 168, 170);
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s;
+    }
+    li:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .tour-image {
+      width: 400px;
+      height: 400px;
+      float: right;
+      margin-right: 10px;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .tour-details {
+      overflow: hidden;
+    }
+    input[type="number"] {
+      width: 60px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      text-align: center;
+    }
+    .total {
+      font-weight: bold;
+      margin-top: 20px;
+      color: #333;
+      text-align: right;
+      font-size: 18px;
+    }
+    .price {
+      font-weight: bold;
+      color: #064b44;
+    }
+  </style>
+  <!-- Include AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body>
+
+<div ng-controller="ToursController">
+  <h1>Tours</h1>
+  <div>
+    <label for="customerName">Customer Name:</label>
+    <input type="text" id="customerName" ng-model="customerName">
+  </div>
+  <ul>
+    <li ng-repeat="tour in tours">
+      <img class="tour-image" ng-src="{{ tour.image }}" alt="{{ tour.name }}">
+      <div class="tour-details">
+        <h2>{{ tour.name }}</h2>
+        <p>{{ tour.description }}</p>
+        <p>Duration: {{ tour.duration }}</p>
+        <p>Price: <span class="price">{{ tour.price | currency }}</span></p>
+        <label>Quantity:</label>
+        <input type="number" ng-model="tour.quantity" ng-change="calculateTotal()" min="0" max="10">
+        <p>Total: {{ tour.total | currency }}</p>
+      </div>
+    </li>
+  </ul>
+  <h3 class="total">Total Expense: <span class="price">{{ totalExpense | currency }}</span></h3>
+  <button ng-click="confirmBooking()">Confirm Booking</button>
+
+  <h2>List of Customers</h2>
+  <ul>
+    <li ng-repeat="customer in customers">
+      <strong>{{ customer.name }}</strong> - Total Expense: {{ customer.totalExpense | currency }}
+      <ul>
+        <li ng-repeat="booking in customer.bookings">
+          {{ booking.tour.name }} - {{ booking.quantity }} tickets
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<script>
+  var app = angular.module('toursApp', []);
+
+  app.controller('ToursController', function($scope) {
+    $scope.tours = [
+      { name: 'City Tour', description: 'Explore the city highlights.', duration: '3 hours', price: 50, quantity: 0, total: 0, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpPUuedWSQAtG9xsPVyf0sqG1yqFmFjW0U7A&usqp=CAU' },
+      { name: 'Mountain Hike', description: 'An adventurous hike through the mountains.', duration: '6 hours', price: 80, quantity: 0, total: 0, image: 'https://www.atlasandboots.com/wp-content/uploads/2019/05/ama-dablam2-most-beautiful-mountains-in-the-world-1024x683.jpg' },
+      { name: 'Beach Day', description: 'Relax on the beautiful sandy beaches.', duration: 'Full day', price: 120, quantity: 0, total: 0, image: 'https://www.atlasandboots.com/wp-content/uploads/2018/06/Whitehaven-Beach-Australia-2.jpg' },
+      { name: 'Winery Tour', description: 'Visit local wineries and taste exquisite wines.', duration: '4 hours', price: 70, quantity: 0, total: 0, image: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/38/cd/1f.jpg' },
+      { name: 'Historical Walking Tour', description: 'Explore the city\'s rich history on foot.', duration: '2 hours', price: 40, quantity: 0, total: 0, image: 'https://www.atlasandboots.com/wp-content/uploads/2016/06/Blue-mosque-dress-code-and-tips-34.jpg' }
+    ];
+
+    $scope.customerName = "";
+    $scope.customers = [];
+
+    $scope.calculateTotal = function() {
+      $scope.totalExpense = 0;
+      angular.forEach($scope.tours, function(tour) {
+        tour.total = tour.price * tour.quantity;
+        $scope.totalExpense += tour.total;
+      });
+    };
+
+    $scope.confirmBooking = function() {
+      if ($scope.totalExpense > 0 && $scope.customerName.trim() !== "") {
+        var bookedTours = $scope.tours.filter(function(tour) {
+          return tour.quantity > 0;
+        });
+        if (bookedTours.length > 0) {
+          var customerBooking = {
+            name: $scope.customerName,
+            totalExpense: $scope.totalExpense,
+            bookings: []
+          };
+          bookedTours.forEach(function(tour) {
+            if (tour.quantity > 0) {
+              customerBooking.bookings.push({
+                tour: tour,
+                quantity: tour.quantity
+              });
+            }
+          });
+          $scope.customers.push(customerBooking);
+          $scope.customerName = "";
+          $scope.totalExpense = 0;
+          angular.forEach($scope.tours, function(tour) {
+            tour.quantity = 0;
+            tour.total = 0;
+          });
+          alert("Thank you, " + customerBooking.name + "! Your booking has been confirmed.");
+        } else {
+          alert("Please select at least one tour before confirming booking.");
+        }
+      } else {
+        alert("Please enter your name and select at least one tour before confirming booking.");
+      }
+    };
+  });
+</script>
+
+</body>
+</html>
