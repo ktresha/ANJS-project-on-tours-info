@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANJS Tours</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>ANJS Tours</h1>
+  </header>
+
+  <main>
+    <section id="customer">
+      <label for="customerName">Customer Name:</label>
+      <input type="text" id="customerName" placeholder="Enter your name">
+    </section>
+
+    <section id="tours">
+      <!-- City Tour -->
+      <div class="tour">
+        <h2>City Tour</h2>
+        <p>Explore the city highlights.</p>
+        <p><strong>Duration:</strong> 3 hours</p>
+        <p><strong>Price:</strong> $50.00</p>
+        <label>Quantity: <input type="number" min="0" id="cityTourQty" value="0"></label>
+        <p><strong>Total:</strong> $<span id="cityTourTotal">0.00</span></p>
+      </div>
+
+      <!-- Mountain Hike -->
+      <div class="tour">
+        <h2>Mountain Hike</h2>
+        <p>An adventurous hike through the mountains.</p>
+        <p><strong>Duration:</strong> 6 hours</p>
+        <p><strong>Price:</strong> $80.00</p>
+        <label>Quantity: <input type="number" min="0" id="mountainHikeQty" value="0"></label>
+        <p><strong>Total:</strong> $<span id="mountainHikeTotal">0.00</span></p>
+      </div>
+
+      <!-- Beach Day -->
+      <div class="tour">
+        <h2>Beach Day</h2>
+        <p>Relax on the beautiful sandy beaches.</p>
+        <p><strong>Duration:</strong> Full day</p>
+        <p><strong>Price:</strong> $120.00</p>
+        <label>Quantity: <input type="number" min="0" id="beachDayQty" value="0"></label>
+        <p><strong>Total:</strong> $<span id="beachDayTotal">0.00</span></p>
+      </div>
+
+      <!-- Winery Tour -->
+      <div class="tour">
+        <h2>Winery Tour</h2>
+        <p>Visit local wineries and taste exquisite wines.</p>
+        <p><strong>Duration:</strong> 4 hours</p>
+        <p><strong>Price:</strong> $70.00</p>
+        <label>Quantity: <input type="number" min="0" id="wineryTourQty" value="0"></label>
+        <p><strong>Total:</strong> $<span id="wineryTourTotal">0.00</span></p>
+      </div>
+
+      <!-- Historical Walking Tour -->
+      <div class="tour">
+        <h2>Historical Walking Tour</h2>
+        <p>Explore the city's rich history on foot.</p>
+        <p><strong>Duration:</strong> 2 hours</p>
+        <p><strong>Price:</strong> $40.00</p>
+        <label>Quantity: <input type="number" min="0" id="historyTourQty" value="0"></label>
+        <p><strong>Total:</strong> $<span id="historyTourTotal">0.00</span></p>
+      </div>
+    </section>
+
+    <footer>
+      <h3>Total Expense: $<span id="totalExpense">0.00</span></h3>
+      <button id="confirmBooking">Confirm Booking</button>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
